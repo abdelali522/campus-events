@@ -1,0 +1,37 @@
+<footer class="main-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <h3 class="footer-title">Campus Events Hub</h3>
+                <p class="footer-text">Your one-stop platform for discovering and joining campus events and activities.</p>
+            </div>
+            <div>
+                <h4 class="footer-heading">Quick Links</h4>
+                <div class="footer-links">
+                    <a href="/" class="footer-link">Home</a>
+                    <a href="/#events" class="footer-link">Browse Events</a> <%# Assuming events are on homepage %>
+                    <a href="/create-event" class="footer-link">Create Event</a>
+                    <a href="/my-events" class="footer-link">My Events</a>
+                    <a href="/profile" class="footer-link">Profile</a>
+                </div>
+            </div>
+            <div>
+                <h4 class="footer-heading">Connect With Us</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-square"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter-square"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                </div>
+                <p class="footer-text">Subscribe to our newsletter</p>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" placeholder="Your email" class="newsletter-input" required>
+                    <button type="submit" class="newsletter-button">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; <%= new Date().getFullYear() %> Campus Events Hub. All rights reserved.</p>
+        </div>
+    </div>
+</footer>

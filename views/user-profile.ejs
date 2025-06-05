@@ -1,0 +1,130 @@
+<%- include('partials/head', { pageTitle: pageTitle || 'User Profile', useFontAwesome: true }) %>
+
+<body class="page-background-gradient <%= isLoggedIn ? 'user-logged-in' : '' %>">
+    <%- include('partials/navbar', { user: user }) %>
+
+    <main class="page-content-wrapper">
+        <div class="user-profile-container container"> <%# This container has max-width: 1000px; margin: auto; padding: 20px; %>
+            <div class="page-title-header">
+                <h1>User Profile</h1>
+                <p>Manage your account information and view your activity.</p>
+            </div>
+
+            <div class="success-message" id="successMessage" style="display:none;"></div>
+            <div class="error-message general-server-error" id="formGeneralError" style="display:none; margin-bottom: 1rem; text-align:left;"></div>
+            
+            <div class="profile-container"> <%# This is the grid for profile-card and info-card %>
+                <!-- Profile Card (Left Side) -->
+                <div class="profile-card">
+                    <div class="profile-photo-container">
+                        <% 
+                           let profilePageImgSrc = '/pics/default-avatar.png'; // Default
+                           if (profileUser && profileUser.profile_photo_url && profileUser.profile_photo_url.startsWith('/uploads/')) {
+                               profilePageImgSrc = profileUser.profile_photo_url;
+                           }
+                        %>
+                        <img id="profilePhoto" class="profile-photo" 
+                             src="<%= profilePageImgSrc %>" 
+                             alt="Profile Photo of <%= profileUser ? profileUser.first_name : 'User' %>"
+                             onerror="this.onerror=null; this.src='/pics/default-avatar.png';">
+                        
+                        <!-- Photo upload input will be part of the edit form, but button can be here if always visible -->
+                        <button class="photo-upload-overlay" id="changePhotoOverlayButton" onclick="document.getElementById('photoInput').click()" title="Change photo" style="display:none;">📷</button>
+                    </div>
+                    
+                    <div class="user-name" id="userNameDisplay"><%= profileUser ? (profileUser.first_name + ' ' + profileUser.last_name) : 'User Name' %></div>
+                    <div class="user-role <%= profileUser ? 'role-' + profileUser.role : 'role-member' %>" id="userRoleDisplay"><%= profileUser ? (profileUser.role.charAt(0).toUpperCase() + profileUser.role.slice(1)) : 'Role' %></div>
+                    
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="eventsCreatedDisplay"><%= profileUser && profileUser.stats ? profileUser.stats.eventsCreated : 0 %></span>
+                            <div class="stat-label">Events Created</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="eventsAttendedDisplay"><%= profileUser && profileUser.stats ? profileUser.stats.eventsAttended : 0 %></span>
+                            <div class="stat-label">Events Attended</div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="mainEditButton" onclick="toggleEditMode()">✏️ Edit Profile</button>
+                    </div>
+                </div>
+
+                <!-- Information Card (Right Side) -->
+                <div class="info-card">
+                    <h2 class="section-title"><span>👤</span> Personal Information</h2>
+                    
+                    <!-- Display View - initially shown -->
+                    <div id="userInfoDisplay">
+                        <div class="info-group">
+                            <div class="info-item"><div class="info-label">First Name</div><div class="info-value" id="firstNameDisplay"><%= profileUser ? profileUser.first_name : 'N/A' %></div></div>
+                            <div class="info-item"><div class="info-label">Last Name</div><div class="info-value" id="lastNameDisplay"><%= profileUser ? profileUser.last_name : 'N/A' %></div></div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-item"><div class="info-label">Email Address</div><div class="info-value" id="emailDisplay"><%= profileUser ? profileUser.email : 'N/A' %></div></div>
+                            <div class="info-item"><div class="info-label">Role</div><div class="info-value" id="roleDisplayInfoCard"><%= profileUser ? (profileUser.role.charAt(0).toUpperCase() + profileUser.role.slice(1)) : 'N/A' %></div></div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-item"><div class="info-label">Member Since</div><div class="info-value" id="memberSinceDisplay"><%= profileUser && profileUser.created_at ? new Date(profileUser.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'}) : 'N/A' %></div></div>
+                            <div class="info-item"><div class="info-label">Last Updated</div><div class="info-value" id="lastUpdatedDisplay"><%= profileUser && profileUser.updated_at ? new Date(profileUser.updated_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'}) : 'N/A' %></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Form for Editing - initially hidden -->
+                    <form id="userProfileEditForm" style="display: none;" novalidate>
+                        <div class="form-group">
+                            <label for="photoInput">Profile Photo (Upload new to change)</label>
+                            <input type="file" id="photoInput" name="profile_photo_file" class="edit-input" accept="image/*" style="padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                            <div class="error-message" id="profile_photo_fileError"></div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-item">
+                                <label for="editFirstName" class="info-label">First Name <span class="required">*</span></label>
+                                <input type="text" id="editFirstName" name="first_name" class="edit-input" value="<%= profileUser ? profileUser.first_name : '' %>" required>
+                                <div class="error-message" id="first_nameError"></div>
+                            </div>
+                            <div class="info-item">
+                                <label for="editLastName" class="info-label">Last Name <span class="required">*</span></label>
+                                <input type="text" id="editLastName" name="last_name" class="edit-input" value="<%= profileUser ? profileUser.last_name : '' %>" required>
+                                <div class="error-message" id="last_nameError"></div>
+                            </div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-item">
+                                <label for="editEmail" class="info-label">Email Address <span class="required">*</span></label>
+                                <input type="email" id="editEmail" name="email" class="edit-input" value="<%= profileUser ? profileUser.email : '' %>" required>
+                                <div class="error-message" id="emailError"></div>
+                            </div>
+                            <div class="info-item">
+                                <label for="editRole" class="info-label">Role</label>
+                                <select id="editRole" name="role" class="edit-input" <%= (user && user.role === 'admin') ? '' : 'disabled' %>>
+                                    <option value="student" <%= profileUser && profileUser.role === 'student' ? 'selected' : '' %>>Student</option>
+                                    <option value="faculty" <%= profileUser && profileUser.role === 'faculty' ? 'selected' : '' %>>Faculty</option>
+                                    <% if (user && user.role === 'admin') { %>
+                                        <option value="admin" <%= profileUser && profileUser.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                                    <% } %>
+                                </select>
+                                <% if (!user || user.role !== 'admin') { %>
+                                <small class="form-text text-muted" style="font-size:0.8em; color: #6c757d; display:block; margin-top:4px;">Role can only be changed by an administrator.</small>
+                                <% } %>
+                                <div class="error-message" id="roleError"></div>
+                            </div>
+                        </div>
+                         <div class="action-buttons" id="editFormActionsContainer"> <!-- Renamed for clarity -->
+                            <button type="button" class="btn btn-success" onclick="saveProfile()">💾 Save Changes</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelEdit()">❌ Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <%- include('partials/footer') %>
+    <script>
+        // Pass the profileUser data from the server to the client-side script
+        const initialUserData = <%- JSON.stringify(profileUser || null) %>;
+    </script>
+    <script src="/js/userProfile.js"></script>
+</body>
+</html>

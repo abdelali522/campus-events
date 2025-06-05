@@ -1,0 +1,137 @@
+<%- include('partials/head', { pageTitle: 'Create Event', useFontAwesome: true }) %>
+
+<body class="page-background-gradient">
+    <%- include('partials/navbar', { user: user }) %> <%# Pass user data if available/needed for navbar %>
+
+    <div class="create-event-page-wrapper container"> <%# Main page wrapper using general container for spacing %>
+        <div class="page-title-header">
+            <h1>Create New Event</h1>
+            <p>Fill in the details below to create a new campus event</p>
+        </div>
+
+        <div class="create-event-form-container"> <%# Specific styling for the form box itself %>
+            <div class="success-message" id="successMessage">
+                <%# Message will be set by JS %>
+            </div>
+            <!-- views/create-event.ejs, inside .create-event-form-container, before the <form> -->
+            <div class="error-message general-form-error" id="formGeneralError" style="display:none; margin-bottom: 1rem; text-align:left;"></div>
+
+            <form id="createEventForm" novalidate>
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span>📋</span> Event Information
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label for="title">Event Title <span class="required">*</span></label>
+                        <input type="text" id="title" name="title" required maxlength="100" 
+                               placeholder="Enter the event title">
+                        <div class="error-message" id="titleError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Event Description</label>
+                        <textarea id="description" name="description" 
+                                  placeholder="Provide a detailed description of the event (optional, max 1000 characters)" maxlength="1000"></textarea>
+                        <div class="error-message" id="descriptionError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logo">Event Logo/Banner</label>
+                        <div class="logo-upload-container" id="logoUploadContainer">
+                            <input type="file" id="logo" name="logo" accept="image/*" class="file-input">
+                            <div class="upload-icon">🖼️</div>
+                            <div class="upload-text">
+                                <strong>Click to upload</strong> or drag and drop
+                                <br>
+                                <small>JPG, PNG, GIF (Max 5MB, Recommended: 1200x600px)</small>
+                            </div>
+                            <img id="logoPreview" class="logo-preview" alt="Logo preview">
+                            <div id="fileInfo" class="file-info"></div>
+                            <button type="button" id="removeLogo" class="remove-logo">Remove Logo</button>
+                        </div>
+                        <div class="error-message" id="logoError"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="category">Event Category <span class="required">*</span></label>
+                            <select id="category" name="category_id" required>
+                                <option value="">Select a category</option>
+                                </select>
+                            <div class="error-message" id="categoryError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">Location <span class="required">*</span></label>
+                            <input type="text" id="location" name="location" required maxlength="100" 
+                                   placeholder="E.g., Main Auditorium or Online">
+                            <div class="error-message" id="locationError"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span>📅</span> Date and Time
+                    </h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="startDatetime">Start Date & Time <span class="required">*</span></label>
+                            <input type="datetime-local" id="startDatetime" name="start_datetime" required>
+                            <div class="error-message" id="startDatetimeError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="endDatetime">End Date & Time <span class="required">*</span></label>
+                            <input type="datetime-local" id="endDatetime" name="end_datetime" required>
+                            <div class="error-message" id="endDatetimeError"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span>⚙️</span> Event Settings
+                    </h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="maxAttendees">Maximum Attendees</label>
+                            <input type="number" id="maxAttendees" name="max_attendees" min="1" 
+                                   placeholder="Leave empty for unlimited">
+                            <div class="error-message" id="maxAttendeesError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Event Visibility</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="isPublic" name="is_public" checked>
+                                <label for="isPublic">Make this event public</label> <%# Make label clickable %>
+                            </div>
+                            <small style="color: #555; margin-top: 5px; display: block;">
+                                Public events are visible to all. Private events may require specific invites (feature TBD).
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                        🔄 Reset Form
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="spinner" id="submitSpinner"></span>
+                        ✨ Create Event
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <%# Pass initial categories data from your route to the script if available %>
+    <script>
+        const initialCategories = <%- JSON.stringify(categories || []) %>;
+    </script>
+    <script src="/js/createEvent.js"></script>
+</body>
+</html>

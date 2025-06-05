@@ -1,0 +1,78 @@
+<%- include('partials/head', { pageTitle: pageTitle || 'Home | Campus Events', useFontAwesome: true }) %>
+
+<body>
+    <%- include('partials/navbar', { user: user }) %>
+
+    <div class="filter-section">
+        <div class="container filter-container">
+            <div class="filter-options">
+                <span class="filter-label">Filter by:</span>
+                <div class="filter-tags">
+                    <span class="filter-tag tag-all active" data-category="all">All</span>
+                    <span class="filter-tag category-academic" data-category="academic">Academic</span>
+                    <span class="filter-tag category-social" data-category="social">Social</span>
+                    <span class="filter-tag category-sports" data-category="sports">Sports</span>
+                    <span class="filter-tag category-club" data-category="club">Club</span>
+                    <span class="filter-tag category-career" data-category="career">Career</span>
+                    <span class="filter-tag category-arts" data-category="arts">Arts & Culture</span>
+                    <span class="filter-tag category-workshop" data-category="workshop">Workshop</span>
+                </div>
+            </div>
+            <div class="filter-controls">
+                <div class="filter-control">
+                    <span>Date:</span>
+                    <select class="filter-select" id="dateFilter">
+                        <option value="all">All Dates</option>
+                        <option value="today">Today</option>
+                        <option value="this_week">This Week</option>
+                        <option value="this_month">This Month</option>
+                    </select>
+                </div>
+                <div class="filter-control">
+                    <span>Sort:</span>
+                    <select class="filter-select" id="sortFilter">
+                        <option value="upcoming">Upcoming</option>
+                        <option value="popular">Most Popular</option>
+                        <option value="newest">Recently Added</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="page-content-wrapper">
+        <div class="container">
+            <h2 class="section-title" id="eventsSectionTitle">Upcoming Events</h2>
+            
+            <div id="eventsLoadingIndicator" style="text-align: center; padding: 40px; font-size: 1.2em; color: #555;">Loading events...</div>
+            
+            <div id="noEventsPlaceholder" style="display: none; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin: 20px auto; max-width: 600px;">
+                <img src="/pics/no-events-placeholder.svg" alt="No events found" style="max-width: 200px; margin-bottom: 20px;">
+                <h3>No Upcoming Events Yet!</h3>
+                <p style="color: #555; margin-bottom:20px;">Check back soon or be the first to create one.</p>
+                <% if (isLoggedIn) { %>
+                    <a href="/create-event" class="btn btn-primary">🎉 Create an Event</a>
+                <% } else { %>
+                    <a href="/register" class="btn btn-primary">🚀 Join & Create Events</a>
+                <% } %>
+            </div>
+
+            <div class="events-grid" id="eventsGrid" style="display:none;">
+                <!-- Event cards will be dynamically inserted here by mainEvents.js -->
+            </div>
+            
+            <div class="pagination" id="paginationControls" style="display:none;">
+                <div class="pagination-container">
+                    <button class="pagination-button" id="prevPage" disabled>Previous</button>
+                    <span id="pageIndicator" style="padding: 0.5rem 1rem; align-self: center;">Page 1 of 1</span>
+                    <button class="pagination-button" id="nextPage" disabled>Next</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
+    
+    <script src="/js/mainEvents.js"></script>
+</body>
+</html>

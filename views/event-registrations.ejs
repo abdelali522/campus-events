@@ -1,0 +1,63 @@
+<%- include('partials/head', { pageTitle: pageTitle || 'Event Registrations', useFontAwesome: true }) %>
+
+<body class="page-background-gradient <%= isLoggedIn ? 'user-logged-in' : '' %>">
+    <%- include('partials/navbar', { user: user }) %>
+
+    <main class="page-content-wrapper">
+        <div class="container">
+            <div class="page-title-header">
+                <h1>Registrations for: <%= event.title %></h1>
+                <% if (registrations.length === 0) { %>
+                    <p>No one has registered for this event yet.</p>
+                <% } else { %>
+                    <p>Total Registrations: <%= registrations.length %></p>
+                <% } %>
+            </div>
+
+            <% if (registrations.length > 0) { %>
+                <div class="registrations-list-container" style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #dee2e6;">
+                                <th style="padding: 10px; text-align: left;">Name</th>
+                                <th style="padding: 10px; text-align: left;">Email</th>
+                                <th style="padding: 10px; text-align: left;">Role</th>
+                                <th style="padding: 10px; text-align: left;">Registered On</th>
+                                <th style="padding: 10px; text-align: left;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% registrations.forEach(reg => { %>
+                                <tr style="border-bottom: 1px solid #e9ecef;">
+                                    <td style="padding: 10px;"><%= reg.first_name %> <%= reg.last_name %></td>
+                                    <td style="padding: 10px;"><%= reg.email %></td>
+                                    <td style="padding: 10px;"><%= reg.role.charAt(0).toUpperCase() + reg.role.slice(1) %></td>
+                                    <td style="padding: 10px;"><%= new Date(reg.registration_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour:'2-digit', minute:'2-digit' }) %></td>
+                                    <td style="padding: 10px;">
+                                        <span class="status-badge status-<%= reg.status.toLowerCase() %>">
+                                            <%= reg.status.charAt(0).toUpperCase() + reg.status.slice(1) %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else if (!event.title) { %>
+                <p style="text-align: center; color: #777;">Could not load event details.</p>
+            <% } %>
+             <div style="text-align: center; margin-top: 30px;">
+                <a href="/my-events" class="btn btn-secondary">Back to My Events</a>
+            </div>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
+    <style>
+        .status-badge { padding: 0.25em 0.6em; font-size: 0.75em; font-weight: 700; border-radius: 0.25rem; }
+        .status-registered { background-color: #d1e7dd; color: #0f5132; }
+        .status-waitlisted { background-color: #fff3cd; color: #664d03; }
+        .status-cancelled { background-color: #f8d7da; color: #842029; }
+    </style>
+</body>
+</html>

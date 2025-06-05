@@ -1,0 +1,48 @@
+<%- include('partials/head', { pageTitle: 'Login', useFontAwesome: false, pageClass: 'center-content-page' }) %>
+
+<body class="page-background-gradient center-content-page <%= isLoggedIn ? 'user-logged-in' : '' %>">
+
+    <div class="login-page-container">
+        <div class="auth-logo">
+            <a href="/"><img src="/pics/logo1.png" alt="Campus Events Hub Logo"></a>
+            <h1>Welcome Back!</h1>
+        </div>
+        
+        <div class="error-message general-server-error" style="display:none; margin-bottom: 1rem; text-align:center;"></div>
+
+
+        <form id="loginForm" method="POST" action="/login" novalidate>
+            <div class="form-group" id="emailGroup">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your university email" required>
+                <span class="error-text">Please enter a valid email address.</span>
+            </div>
+
+            <div class="form-group" id="passwordGroup">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <span class="error-text">Password cannot be empty.</span>
+            </div>
+
+            <div class="remember-forgot">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <div class="forgot-password">
+                    <a href="/forgot-password">Forgot password?</a>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login">Login</button>
+            <div class="success-message login-success-message" id="loginSuccessMessage" style="display:none;">Login successful! Redirecting...</div>
+        </form>
+
+        <div class="auth-switch-link">
+            <p>Don't have an account? <a href="/register">Sign Up</a></p>
+        </div>
+    </div>
+
+    <script src="/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<%- include('partials/head', { pageTitle: 'My Events', useFontAwesome: true }) %>
+
+<body class="page-background-gradient"> <%# Apply the gradient background and flex centering %>
+    <%- include('partials/navbar', { user: user }) %> <%# Assuming 'user' object is passed from route %>
+
+    <div class="my-events-page-container"> <%# Specific container for this page's content %>
+        <div class="page-title-header"> <%# Use the class for styled header blocks %>
+            <h1>My Events Dashboard</h1>
+            <p>Manage your registered events and created events</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="registeredCount">0</div>
+                    <div class="stat-label">Registered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="createdCount">0</div>
+                    <div class="stat-label">Created</div>
+                </div>
+            </div>
+            
+            <div class="category-toggle">
+                <button class="toggle-btn" id="toggleRegistered" onclick="toggleCategory('registered')">
+                    📅 <span>Registered Events</span>
+                </button>
+                <button class="toggle-btn" id="toggleCreated" onclick="toggleCategory('created')">
+                    🎯 <span>Created Events</span>
+                </button>
+                <button class="toggle-btn" id="toggleBoth" onclick="showBothCategories()">
+                    📊 <span>Show Both</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="events-section" id="registeredSection">
+            <h2 class="section-title">
+                <span class="section-icon">📅</span>
+                Events I'm Registered For
+            </h2>
+            <div class="events-grid" id="registeredEvents">
+                </div>
+        </div>
+
+        <div class="events-section" id="createdSection">
+            <h2 class="section-title">
+                <span class="section-icon">🎯</span>
+                Events I Created
+            </h2>
+            <div class="events-grid" id="createdEvents">
+                </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <%# Pass initial event data from your route to the script if available %>
+    <script>
+        const initialRegisteredEvents = <%- JSON.stringify(registeredEvents || []) %>;
+        const initialCreatedEvents = <%- JSON.stringify(createdEvents || []) %>;
+    </script>
+    <script src="/js/myEvents.js"></script>
+</body>
+</html>

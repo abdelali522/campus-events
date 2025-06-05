@@ -1,0 +1,769 @@
+/* =========================================
+   Global Resets & Base Styles
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f3f4f6; /* Default for pages not using gradient */
+    color: #333;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body.page-background-gradient {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed; /* Keep gradient fixed during scroll */
+}
+
+/* For pages like Login/Register that need a single centered box */
+body.center-content-page.page-background-gradient {
+    align-items: center;
+    justify-content: center;
+    padding: 20px; /* Padding around the centered box itself */
+}
+/* The single child of body.center-content-page (e.g. .login-page-container) will be centered. */
+
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: inherit; }
+ul { list-style: none; }
+
+/* =========================================
+   Main Page Structure Wrappers
+   ========================================= */
+.page-content-wrapper {
+    flex-grow: 1; /* Takes up available vertical space */
+    width: 100%;
+    padding-top: 20px;    /* Add some space above main page content */
+    padding-bottom: 40px; /* Add some space below main page content, before footer */
+}
+
+.container { /* General container for constraining width and centering */
+    width: 100%;
+    max-width: 1200px; /* Default max-width */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;  /* Horizontal padding */
+    padding-right: 1rem;
+}
+
+
+/* =========================================
+   Navigation
+   ========================================= */
+nav.main-nav {
+    background-color: #4f46e5;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 0;
+    width: 100%;
+    flex-shrink: 0; /* Prevent from shrinking */
+    position: sticky; /* Optional: make navbar sticky */
+    top: 0;           /* Optional: make navbar sticky */
+    z-index: 1000;    /* Optional: ensure it's above other content if sticky */
+}
+
+.main-nav .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* max-width and margin:auto are handled by the parent .container if nav-container is nested,
+       or directly if .main-nav .nav-container is used as the top-level constrained element */
+}
+
+.main-nav .nav-logo { display: flex; align-items: center; }
+.main-nav .nav-logo img { height: 40px; width: 40px; margin-right: 0.75rem; } /* Slightly smaller logo */
+.main-nav .nav-logo a { font-size: 1.2rem; font-weight: bold; color: white; display: flex; align-items: center; }
+.main-nav .nav-logo a span { display: inline-block; margin-left: 0.5rem; }
+
+
+.main-nav .nav-links { display: flex; align-items: center; }
+.main-nav .nav-links a { margin-left: 1.25rem; color: white; font-weight: 500; font-size: 0.9rem; } /* Slightly smaller nav links */
+.main-nav .nav-links a:hover { text-decoration: underline; }
+
+.main-nav .profile-menu { display: flex; align-items: center; margin-left: 1.25rem; position: relative; }
+.main-nav .profile-menu img { width: 2rem; height: 2rem; border-radius: 50%; border: 1px solid white; }
+.main-nav .profile-menu span { margin-left: 0.5rem; margin-right: 0.25rem; font-size: 0.9rem;}
+.main-nav .profile-menu i { font-size: 0.7rem; }
+
+
+.main-nav .search-container { display: flex; align-items: center; margin-left: 1.25rem; }
+.main-nav .search-input { padding: 0.4rem 0.8rem; border-radius: 0.3rem 0 0 0.3rem; border: none; width: 12rem; font-size: 0.875rem; }
+.main-nav .search-button { background-color: #6366f1; color: white; padding: 0.4rem 0.8rem; border: none; border-radius: 0 0.3rem 0.3rem 0; font-size: 0.875rem; }
+.main-nav .search-button:hover { background-color: #4338ca; }
+.main-nav .search-icon-button { background-color: transparent; color: white; border: none; display: none; align-items: center; margin-left: 1rem; font-size: 1.1rem; }
+.main-nav .search-icon-button:hover { color: #e0e7ff; }
+
+
+/* =========================================
+   Page-Specific Containers (inside .page-content-wrapper > .container)
+   ========================================= */
+
+.registration-container { /* This is a direct child of body.center-content-page */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-page-container { /* This is a direct child of body.center-content-page */
+    background-color: white;
+    padding: 2.5rem 2rem;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 420px;
+    text-align: left;
+}
+
+/* Wrappers for content of full pages - these go INSIDE .page-content-wrapper (and optionally inside a .container) */
+.user-profile-content-area, /* Replaces .user-profile-container if it was meant for full width control */
+.my-events-page-content-area,
+.create-event-page-content-area {
+    /* These classes can be used on a div that wraps the .page-title-header and main form/grid */
+    /* If .container is used as their parent, they might not need max-width and margin:auto themselves */
+    /* For example, .my-events-page-container in CSS was max-width: 1200px, which .container already does */
+    /* The padding here is for INSIDE these areas */
+    padding: 20px; 
+    background: rgba(255, 255, 255, 0.1); /* Subtle overlay for content on gradient if needed */
+    border-radius: 15px; /* Optional rounded corners for the content block */
+    margin-bottom: 20px; /* Space before footer if content is short */
+}
+/* If you use .user-profile-container directly (like in profile.ejs), it should have margin:auto & max-width */
+.user-profile-container { max-width: 1000px; margin-left:auto; margin-right:auto; padding:20px; /* background: rgba(255,255,255,0.1); border-radius:15px; */}
+.my-events-page-container { max-width: 1200px; margin-left:auto; margin-right:auto; padding:0; /* Padding is on inner elements */ }
+.create-event-form-container { /* This is the white form box */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    max-width: 800px; /* Max width of the form itself */
+    margin-left: auto;  /* Centering the form box if its parent is wider */
+    margin-right: auto;
+}
+
+
+/* =========================================
+   Page Headers (Visual Title Blocks for content sections)
+   ========================================= */
+.page-title-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+.page-title-header h1 { color: #333; font-size: 2.5em; margin-bottom: 10px; }
+.page-title-header p { color: #666; font-size: 1.1em; }
+
+/* Auth page logos */
+.registration-logo-header,
+.login-page-container .auth-logo {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.registration-logo-header h1,
+.login-page-container .auth-logo h1 {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2.2rem; /* Unified size */
+    font-weight: 700;
+    margin-bottom: 0.5rem; /* Unified margin */
+}
+.registration-logo-header p { color: #666; font-size: 1rem; }
+.login-page-container .auth-logo img { max-width: 150px; margin-bottom: 0.5rem; }
+
+/* =========================================
+   Forms
+   ========================================= */
+/* General Form Group used in Register & Create Event & Login */
+.form-group {
+    margin-bottom: 20px; /* Unified */
+    position: relative;
+}
+
+/* Form Row variations */
+.registration-container .form-row { display: flex; gap: 15px; }
+.registration-container .form-row .form-group { flex: 1; }
+
+.create-event-form-container .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+/* No specific .form-row for login, uses stacked .form-group */
+
+/* Labels */
+label, .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.login-page-container .form-group label { font-size: 0.9rem; color: #444; margin-bottom: 0.6rem; }
+.create-event-form-container .form-group label .required { color: #e74c3c; }
+
+/* Inputs, Selects, Textareas - Base for Register page */
+input[type="text"], input[type="email"], input[type="password"],
+input[type="number"], input[type="datetime-local"],
+select, textarea {
+    width: 100%;
+    padding: 12px 15px; /* Unified padding */
+    border: 2px solid #e1e8ed;
+    border-radius: 10px; /* Unified radius */
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #fafbfc;
+}
+input:focus, select:focus, textarea:focus { /* General focus */
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+/* Input transform on focus (from register page) - apply this specifically or make it a class */
+.input-lift-focus:focus {
+    transform: translateY(-2px);
+}
+
+/* Create Event specific input styling */
+.create-event-form-container input,
+.create-event-form-container select,
+.create-event-form-container textarea {
+    background: white; /* Override register's #fafbfc */
+    border-color: #e0e0e0;
+}
+.create-event-form-container textarea { resize: vertical; min-height: 100px; }
+
+/* Login specific input styling */
+.login-page-container .form-group input[type="email"],
+.login-page-container .form-group input[type="password"] {
+    padding: 0.9rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+.login-page-container .form-group input[type="email"]:focus,
+.login-page-container .form-group input[type="password"]:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+
+/* Password specific (Register) */
+.password-group { position: relative; }
+.password-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #666; font-size: 1.2rem; padding: 0; width: auto; }
+.password-toggle:focus { outline: none; box-shadow: none; transform: translateY(-50%); }
+.password-strength { margin-top: 8px; font-size: 0.85rem; }
+.strength-weak { color: #dc2626; }
+.strength-medium { color: #d97706; }
+.strength-strong { color: #059669; }
+
+/* Login specific form elements */
+.login-page-container .remember-forgot { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; font-size: 0.85rem; }
+.login-page-container .remember-me { display: flex; align-items: center; color: #555; }
+.login-page-container .remember-me input[type="checkbox"] { margin-right: 0.5rem; width: auto; transform: scale(0.9); }
+.login-page-container .remember-me label { margin-bottom: 0; font-weight: normal; color: #555; font-size: 0.85rem; }
+.login-page-container .forgot-password a { color: #667eea; text-decoration: none; font-size: 0.85rem; }
+.login-page-container .forgot-password a:hover { text-decoration: underline; }
+
+.login-link, /* Register page link to login */
+.login-page-container .auth-switch-link { /* Login page link to register */
+    text-align: center;
+    margin-top: 1.5rem; /* Unified */
+    color: #555;
+    font-size: 0.9rem;
+}
+.login-link a,
+.login-page-container .auth-switch-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+.login-link a:hover,
+.login-page-container .auth-switch-link a:hover {
+    text-decoration: underline;
+}
+
+/* Create Event - Logo Upload */
+.logo-upload-container { position: relative; border: 2px dashed #e0e0e0; border-radius: 10px; padding: 30px; text-align: center; transition: all 0.3s ease; background: #fafafa; }
+.logo-upload-container:hover, .logo-upload-container.dragover { border-color: #667eea; background: #f0f4ff; }
+.logo-upload-container.dragover { transform: scale(1.02); }
+.logo-upload-container .file-input { position: absolute; opacity: 0; width: 100%; height: 100%; top:0; left:0; cursor: pointer; }
+.logo-upload-container .upload-text { color: #666; font-size: 1em; margin-bottom: 10px; }
+.logo-upload-container .upload-icon { font-size: 3em; color: #667eea; margin-bottom: 15px; }
+.logo-upload-container .file-info { margin-top: 15px; padding: 10px; background: #e8f5e8; border-radius: 8px; color: #2d5a2d; display: none; }
+.logo-upload-container .logo-preview { max-width: 200px; max-height: 200px; margin: 15px auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; object-fit: contain; }
+.logo-upload-container .remove-logo { background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.9em; margin-top: 10px; display: none; }
+.logo-upload-container .remove-logo:hover { background: #c0392b; }
+
+/* Create Event - Checkbox */
+.create-event-form-container .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.create-event-form-container .checkbox-group input[type="checkbox"] { width: auto; margin: 0; transform: scale(1.2); }
+.create-event-form-container .checkbox-group label { font-weight: normal; font-size: 0.9rem; margin-bottom: 0; }
+
+
+/* Create Event - Form Actions & Spinner */
+.create-event-form-container .form-actions { display: flex; gap: 15px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+.create-event-form-container .spinner { border: 2px solid #f3f3f3; border-top: 2px solid #667eea; border-radius: 50%; width: 1em; height: 1em; animation: spin 1s linear infinite; display: none; margin-right: 8px; vertical-align: middle; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+
+/* =========================================
+   Buttons
+   ========================================= */
+.btn {
+    padding: 10px 24px; /* Unified base padding */
+    border: none;
+    border-radius: 8px; /* Unified radius */
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: all 0.2s ease-out;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 5px;
+    line-height: 1.5; /* Ensure text fits well */
+}
+
+/* Create Event button uses this, min-width was there, can be kept or rely on padding */
+.create-event-form-container .form-actions .btn { min-width: 140px; }
+
+.btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+.btn:active { transform: translateY(0); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+.btn-primary { background: #667eea; color: white; }
+.btn-primary:hover { background: #5a6fd8; }
+
+.btn-secondary { background: #95a5a6; color: white; }
+.btn-secondary:hover { background: #7f8c8d; }
+
+.btn-success { background: #2ecc71; color: white; }
+.btn-success:hover { background: #27ae60; }
+
+.btn-danger { background: #e74c3c; color: white; }
+.btn-danger:hover { background: #c0392b; }
+
+.btn-register { /* Specific to registration page */
+    width: 100%; padding: 15px; font-size: 1.1rem;
+    background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+    border-radius: 12px; margin-top: 10px;
+}
+.btn-register:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3); }
+.btn-register:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.login-page-container .btn-login { /* Specific to login page */
+    width: 100%; padding: 0.9rem; font-size: 1rem; font-weight: 600;
+    background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+    border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.login-page-container .btn-login:hover { opacity: 0.9; transform: translateY(-2px); }
+
+
+/* Toggle buttons from my-events.html */
+.toggle-btn {
+    padding: 10px 20px; font-size: 0.95em; /* Slightly smaller */
+    border: 2px solid #667eea; border-radius: 25px;
+    background: transparent; color: #667eea; font-weight: 600;
+    /* display: flex; align-items: center; gap: 8px; /* From base .btn */
+}
+.toggle-btn.active { background: #667eea; color: white; }
+.toggle-btn.inactive { opacity: 0.6; border-color: #adb5bd; color: #6c757d; }
+.toggle-btn.inactive:hover { opacity: 0.8; }
+
+
+/* =========================================
+   Messages (Error, Success)
+   ========================================= */
+/* General Error Message (e.g., for form submission on Register page) */
+.error-message.general-form-error {
+    background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;
+    padding: 12px; border-radius: 8px; margin-bottom: 20px;
+    font-size: 0.9rem; display: none;
+}
+/* Inline Field Error Messages (used in Create Event, Login) */
+.form-group .error-message,
+.login-page-container .form-group .error-text { /* .error-text is used in login */
+    background: none; border: none; color: #e74c3c;
+    padding: 0; margin-top: 5px; margin-bottom: 0;
+    font-size: 0.85em; /* Unified */
+    display: none; /* JS will show this */
+}
+.login-page-container .form-group.error .error-text { display: block; }
+
+
+/* Success Messages */
+.success-message { /* General success message style */
+    background: #d1e7dd; color: #0f5132; /* Bootstrap-like success colors */
+    border: 1px solid #badbcc;
+    padding: 1rem; border-radius: 0.5rem; /* Unified style */
+    margin-bottom: 20px; font-size: 0.95rem;
+    display: none; /* JS controls display */
+    text-align: center; /* Good default */
+}
+/* Login page specific success (if needed, but general one should be fine) */
+.login-page-container .login-success-message {
+    /* Uses the general .success-message style now, or customize if strictly different */
+}
+
+
+/* =========================================
+   User Profile Page
+   ========================================= */
+.user-profile-content-area .profile-container { /* The grid for profile card & info card */
+    display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-bottom: 30px;
+}
+.profile-card { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); text-align: center; height: fit-content; }
+.profile-photo-container { position: relative; margin-bottom: 20px; }
+.profile-photo { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 5px solid #667eea; box-shadow: 0 6px 20px rgba(0,0,0,0.1); margin: 0 auto 15px; display: block; background: #e9ecef; }
+.photo-upload-overlay { position: absolute; bottom: 15px; right: calc(50% - 90px + 180px - 25px - 5px); /* Complex to center with photo, adjust */ background: #667eea; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 1em; box-shadow: 0 2px 10px rgba(102,126,234,0.4); transition: all 0.3s ease; display:flex; align-items:center; justify-content:center;}
+.photo-upload-overlay:hover { background: #5a6fd8; transform: scale(1.1); }
+.photo-input { display: none; }
+.user-name { font-size: 1.7em; color: #333; margin-bottom: 8px; font-weight: 600; }
+.user-role { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px; }
+.role-student { background: #e0f2f7; color: #006064; } /* Adjusted colors */
+.role-faculty { background: #fff8e1; color: #ff6f00; }
+.role-admin { background: #fce4ec; color: #ad1457; }
+
+.user-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+.user-profile-content-area .stat-item { text-align: center; padding: 12px; background: rgba(102,126,234,0.08); border-radius: 10px; }
+.user-profile-content-area .stat-number { font-size: 1.8em; font-weight: bold; color: #667eea; display: block; margin-bottom: 2px; }
+.user-profile-content-area .stat-label { font-size: 0.8em; color: #555; }
+
+.info-card { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.info-group { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.info-item { background: #f8f9fa; padding: 15px; border-radius: 10px; border-left: 4px solid #667eea; }
+.info-label { font-size: 0.9em; color: #555; margin-bottom: 5px; font-weight: 600; }
+.info-value { font-size: 1.05em; color: #333; font-weight: 500; word-break: break-word; }
+.edit-input { width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 1em; font-family: inherit; background: white; transition: border-color 0.2s ease; }
+.edit-input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.2); }
+.profile-card .action-buttons, .info-card .action-buttons { text-align: center; margin-top: 25px; display: flex; justify-content: center; gap: 10px; }
+
+
+/* =========================================
+   Events Listing & Cards (Index, My Events)
+   ========================================= */
+.filter-section { background-color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 1rem 0; margin-bottom: 20px; /* Added margin-bottom */ }
+.filter-container { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; }
+.filter-options { display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 0.5rem; gap: 0.75rem; }
+.filter-label { font-weight: 500; margin-right: 0.25rem; font-size: 0.9rem; }
+.filter-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.filter-tag { padding: 0.3rem 0.8rem; border-radius: 20px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s ease; border: 1px solid transparent;}
+.filter-tag:hover { opacity: 0.8; transform: translateY(-1px); }
+.filter-tag.active { font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.tag-all { background-color: #e9ecef; color: #495057; border-color: #dee2e6;}
+.tag-all.active { background-color: #6c757d; color: white; border-color: #6c757d;}
+
+.category-academic, .event-category.category-academic, .filter-tag.category-academic.active { background-color: #2ecc71; color: white; border-color: #2ecc71;}
+.category-social, .event-category.category-social, .filter-tag.category-social.active { background-color: #e74c3c; color: white; border-color: #e74c3c;}
+.category-sports, .event-category.category-sports, .filter-tag.category-sports.active { background-color: #f39c12; color: white; border-color: #f39c12;}
+.category-club, .event-category.category-club, .filter-tag.category-club.active { background-color: #9b59b6; color: white; border-color: #9b59b6;}
+.category-career, .event-category.category-career, .filter-tag.category-career.active { background-color: #1abc9c; color: white; border-color: #1abc9c;}
+.category-arts, .event-category.category-arts, .filter-tag.category-arts.active { background-color: #e67e22; color: white; border-color: #e67e22;}
+.category-workshop, .event-category.category-workshop, .filter-tag.category-workshop.active { background-color: #3498db; color: white; border-color: #3498db;}
+.category-other, .event-category.category-other, .filter-tag.category-other.active { background-color: #95a5a6; color: white; border-color: #95a5a6;}
+.filter-tag:not(.active):not(.tag-all) { background-color: #f8f9fa; color: #495057; border: 1px solid #dee2e6;}
+
+
+.filter-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.filter-control { display: flex; align-items: center; }
+.filter-control span { margin-right: 0.5rem; font-size: 0.9rem; }
+.filter-select { border: 1px solid #ced4da; border-radius: 0.3rem; padding: 0.3rem 0.75rem; font-size: 0.9rem; background-color: white;}
+
+.main-content { /* Used on index.ejs for the events grid area */
+    /* padding for this is handled by .page-content-wrapper and .container */
+}
+
+/* Section Title (used by index, my-events, user-profile, create-event) */
+.section-title {
+    font-size: 1.6em; /* Unified */
+    font-weight: 600; /* Unified */
+    margin-bottom: 1.5rem;
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #667eea;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.my-events-page-container .section-icon { font-size: 1.2em; } /* My Events page specific icon size */
+.create-event-form-container .section-title span,
+.my-events-page-container .section-title span:first-child { /* Icon styling for section titles */
+    font-size: 1.2em; /* Ensure icons are slightly larger */
+    color: #667eea;
+}
+
+
+.events-section { /* Used in My Events */
+    background: rgba(255,255,255,0.98); /* Slightly more opaque */
+    backdrop-filter: blur(5px);
+    border-radius: 15px; /* Unified radius */
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+.events-section.hidden { display: none; }
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Slightly smaller min for cards */
+    gap: 1.5rem; /* Unified gap */
+}
+
+.event-card {
+    background-color: white;
+    border-radius: 10px; /* Unified radius */
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    display: flex; /* For better internal structure if needed */
+    flex-direction: column;
+}
+.event-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+.my-events-page-container .event-card { /* My Events page specific card style */
+    padding: 20px;
+    border-left: 4px solid #667eea; /* Default theme color */
+}
+.my-events-page-container .event-card.created { border-left-color: #e74c3c; } /* Specific for 'created' events */
+
+.event-card-link { display:block; text-decoration: none; color: inherit; height:100%; display:flex; flex-direction: column;} /* Make entire card clickable */
+
+
+.event-image-container { height: 10rem; /* Slightly smaller */ background-color: #e9ecef; position: relative; overflow: hidden;}
+.event-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+.event-card:hover .event-image { transform: scale(1.05); }
+
+.event-category { /* Badge on card */
+    position: absolute; top: 0.75rem; left: 0.75rem;
+    padding: 0.3rem 0.75rem; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 500;
+    /* Background/color set by specific category classes like .category-workshop */
+    z-index: 1;
+}
+.my-events-page-container .event-category { /* My Events card category (static, not on image) */
+    position: static; display: inline-block; margin-bottom: 10px;
+    font-size: 0.8em;
+    /* background and color inherited from specific category class */
+}
+
+.event-details { padding: 1rem; flex-grow:1; display:flex; flex-direction:column; } /* Index page card content */
+.my-events-page-container .event-card .event-details { padding: 0; } /* My Events card has padding on card itself */
+
+.event-date, .my-events-page-container .event-meta-item { display: flex; align-items: center; color: #555; font-size: 0.8rem; margin-bottom: 0.5rem; gap: 6px; }
+.my-events-page-container .event-meta { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.event-date i, .my-events-page-container .event-meta-icon { font-size: 0.9em; width: 14px; text-align: center; color: #888; }
+
+.event-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; color: #222; line-height: 1.3; }
+.my-events-page-container .event-title { font-size: 1.25em; margin-bottom: 8px; }
+
+.event-description { color: #666; font-size:0.85rem; margin-bottom: 1rem; line-height: 1.5; flex-grow:1; } /* Allow description to grow */
+.my-events-page-container .event-description { font-size:0.9rem; }
+
+.event-location { display: flex; align-items: center; color: #555; font-size: 0.8rem; margin-bottom: 1rem; gap: 6px; }
+.event-location i { font-size: 0.9em; color: #888; }
+
+.event-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; /* Pushes to bottom of card */ }
+.my-events-page-container .event-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+.attendees { display: flex; align-items: center; }
+.attendees-avatars { display: flex; margin-right: 0.3rem; }
+.attendee-avatar { width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 2px solid white; margin-left: -0.4rem; background-color: #ccc; }
+.attendee-avatar:first-child { margin-left: 0; }
+.attendees-count { font-size: 0.8rem; color: #555; }
+
+.register-button { /* Button on index event card */
+    background-color: #667eea; color: white; border: none;
+    border-radius: 6px; padding: 0.4rem 0.9rem;
+    font-size: 0.8rem; font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+.register-button:hover { background-color: #5a6fd8; }
+
+.no-events, .no-events-message { text-align: center; color: #666; font-size: 1.05em; padding: 30px 20px; background: #f8f9fa; border-radius: 10px; border: 1px dashed #ddd; margin: 20px 0; }
+.no-events .btn { margin-top: 15px; }
+
+
+/* Pagination */
+.pagination { display: flex; justify-content: center; margin-top: 2.5rem; }
+.pagination-container { display: flex; align-items: center; gap: 0.3rem; }
+.pagination-button { margin: 0; padding: 0.5rem 0.9rem; border: 1px solid #d1d5db; border-radius: 0.3rem; background-color: white; font-size:0.9rem; }
+.pagination-button:hover { background-color: #f3f4f6; }
+.pagination-button:disabled { opacity:0.5; cursor:not-allowed; }
+.pagination-button.active { background-color: #4f46e5; color: white; border-color: #4f46e5; }
+#pageIndicator { font-size: 0.9rem; color: #555; padding: 0 0.5rem; }
+
+
+/* =========================================
+   Footer
+   ========================================= */
+footer.main-footer {
+    background-color: #1f2937;
+    color: #adb5bd; /* Lighter text */
+    padding: 2.5rem 0;
+    width: 100%;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+}
+.footer-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+.footer-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color:white; }
+.footer-text { color: #9ca3af; line-height: 1.6; }
+.footer-heading { font-weight: 600; margin-bottom: 1rem; color: white; font-size: 1rem;}
+.footer-links { display: flex; flex-direction: column; gap: 0.4rem; }
+.footer-link { color: #9ca3af; }
+.footer-link:hover { color: white; text-decoration: underline;}
+.social-links { display: flex; gap: 1rem; margin-bottom: 1rem; } /* Added gap */
+.social-link { color: #9ca3af; font-size: 1.25rem; }
+.social-link:hover { color: white; }
+.newsletter-form { display: flex; margin-top: 0.5rem; }
+.newsletter-input { padding: 0.5rem 0.75rem; border: 1px solid #4b5563; border-radius: 0.3rem 0 0 0.3rem; width: 100%; background-color: #374151; color:white; }
+.newsletter-input::placeholder { color: #9ca3af; }
+.newsletter-button { background-color: #4f46e5; color: white; border: none; border-radius: 0 0.3rem 0.3rem 0; padding: 0.5rem 1rem; }
+.newsletter-button:hover { background-color: #4338ca; }
+.footer-copyright { border-top: 1px solid #374151; margin-top: 2rem; padding-top: 2rem; text-align: center; color: #9ca3af; font-size: 0.85rem; }
+
+
+/* =========================================
+   Media Queries
+   ========================================= */
+@media (max-width: 600px) { /* Small devices */
+    .registration-container { padding: 30px 20px; margin: 10px; }
+    .registration-container .form-row { flex-direction: column; gap: 0; }
+    .registration-logo-header h1, .login-page-container .auth-logo h1 { font-size: 1.8rem; }
+    .page-title-header h1 { font-size: 1.8em; }
+    .page-title-header p { font-size: 1em; }
+    .my-events-page-container .page-title-header .stats { flex-direction:column; gap: 10px; }
+
+}
+
+@media (max-width: 768px) { /* Tablets and smaller */
+    .page-title-header h1 { font-size: 2em; }
+
+    .user-profile-content-area .profile-container { grid-template-columns: 1fr; }
+    .user-profile-content-area .info-group { grid-template-columns: 1fr; }
+    .user-profile-content-area .user-stats { grid-template-columns: 1fr; gap: 10px; } /* For consistency */
+    .user-profile-content-area .profile-photo { width: 120px; height: 120px; }
+    .photo-upload-overlay { width:35px; height:35px; font-size:0.9em; bottom:10px; right: calc(50% - 60px + 120px - 17px - 5px); }
+
+
+    .my-events-page-container .events-grid { grid-template-columns: 1fr; }
+    .my-events-page-container .page-title-header .stats { gap: 10px; } /* Reduced gap */
+    .my-events-page-container .page-title-header .stat-item { padding: 10px; } /* Reduced padding */
+    .my-events-page-container .category-toggle { flex-direction: column; gap: 10px; }
+    .my-events-page-container .category-toggle .toggle-btn { width:100%; justify-content: center; font-size: 0.9em; padding: 10px 18px; }
+
+    .create-event-form-container .form-row { grid-template-columns: 1fr; }
+    .create-event-form-container { padding: 25px; }
+    .create-event-form-container .form-actions { flex-direction: column; align-items: stretch; } /* Full width buttons on mobile */
+    .create-event-form-container .form-actions .btn { width: 100%; margin-left:0; margin-right:0; }
+
+    .filter-container { flex-direction: column; gap: 1rem; }
+    .filter-options, .filter-controls { width: 100%; justify-content: center; }
+    .filter-controls { gap: 0.5rem; }
+    .filter-control { margin-left: 0; }
+
+    .main-nav .nav-links a:not(:first-child):not(.profile-menu a):not(.auth-switch-link a) { 
+       
+    }
+    .main-nav .nav-links { gap: 0.5rem; } /* Reduce gap between nav items */
+    .main-nav .nav-links a { margin-left: 0.75rem; }
+    .main-nav .profile-menu { margin-left: 0.75rem; }
+    .main-nav .nav-logo img { height: 35px; width: 35px; }
+    .main-nav .nav-logo a span { display:none; } /* Hide text logo on small screens */
+
+}
+
+@media (min-width: 768px) { /* Tablets and up */
+    .main-content .events-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); } /* More flexible grid */
+    .footer-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); } /* Auto-fit footer columns */
+}
+
+@media (min-width: 1024px) { /* Desktop */
+    .main-content .events-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+    /* .footer-grid is already responsive with auto-fit */
+    .main-nav .search-icon-button { display: none; }
+    .main-nav .search-container { display: flex; }
+     .main-nav .nav-logo a span { display:inline-block; } /* Show text logo again */
+}
+
+@media (max-width: 1023px) { /* Up to Desktop, for nav search toggle */
+    .main-nav .search-container { display: none; }
+    .main-nav .search-icon-button { display: flex; }
+}
+
+
+
+
+.btn .spinner { /* General spinner style for buttons */
+    display: inline-block; /* Changed from none to be controlled by JS logic adding/removing */
+    border: 2px solid rgba(255,255,255,0.3); /* Light border for contrast */
+    border-top-color: #fff; /* Spinner color */
+    border-radius: 50%;
+    width: 1em; /* Relative to button font size */
+    height: 1em;
+    animation: spin 0.8s linear infinite;
+    margin-right: 0.5em;
+    vertical-align: middle; /* Align with text */
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Ensure .btn-sm handles spinner size if needed */
+.btn-sm .spinner {
+    width: 0.8em;
+    height: 0.8em;
+    border-width: 2px; /* Keep border width consistent or slightly smaller */
+}
+
+
+
+/* Basic Spinner Animation */
+.spinner {
+    display: inline-block;
+    width: 1em; /* Adjust size as needed */
+    height: 1em; /* Adjust size as needed */
+    border: 2px solid rgba(0, 0, 0, 0.1); /* Light border */
+    border-left-color: #007bff; /* Spinner color - change to your theme color */
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.btn-success {
+    background-color: #28a745 !important; /* Green for success */
+    color: white !important;
+    border-color: #28a745 !important;
+}
+.btn-success:hover {
+    background-color: #218838 !important;
+    border-color: #1e7e34 !important;
+}

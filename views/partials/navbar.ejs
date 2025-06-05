@@ -1,0 +1,47 @@
+<nav class="main-nav">
+    <div class="nav-container container">
+        <div class="nav-logo">
+            <a href="/">
+                <img src="/pics/logo0.png" alt="Campus Events Hub Logo">
+                <span>Campus Events Hub</span>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Events</a>
+
+            <% if (user && user.user_id) { %>
+                <a href="/my-events" class="nav-link-loggedin">My Events</a>
+                <a href="/create-event" class="nav-link-loggedin">Create Event</a>
+                
+                <div class="search-container">
+                    <input type="text" placeholder="Search events..." class="search-input" id="navSearchInput">
+                    <button class="search-button" id="navSearchButton"><i class="fas fa-search"></i></button>
+                </div>
+                <button class="search-icon-button" id="navSearchIconButton">
+                    <i class="fas fa-search"></i>
+                </button>
+
+                <div class="profile-menu">
+                    <a href="/profile" title="View Profile">
+                        <img src="<%= user.profileImageUrl && user.profileImageUrl.startsWith('/uploads/') ? user.profileImageUrl : '/pics/default-avatar.png' %>" 
+                             alt="Profile photo of <%= user.firstName %>" 
+                             onerror="this.onerror=null; this.src='/pics/default-avatar.png';">
+                        <span><%= user.firstName || 'Profile' %></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                </div>
+                <a href="/logout" class="nav-link-auth">Logout</a>
+            <% } else { %>
+                <div class="search-container">
+                    <input type="text" placeholder="Search events..." class="search-input" id="navSearchInput">
+                    <button class="search-button" id="navSearchButton"><i class="fas fa-search"></i></button>
+                </div>
+                <button class="search-icon-button" id="navSearchIconButton">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="/login" class="nav-link-auth">Login</a>
+                <a href="/register" class="nav-link-auth">Register</a>
+            <% } %>
+        </div>
+    </div>
+</nav>

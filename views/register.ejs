@@ -1,0 +1,71 @@
+<%- include('partials/head', { pageTitle: 'Register', useFontAwesome: false }) %>
+
+<body class="page-background-gradient center-content-page">
+
+    <div class="registration-container">
+        <div class="registration-logo-header">
+            <h1>🎓 Campus Events Hub</h1>
+            <p>Join your university community</p>
+        </div>
+
+        <div class="error-message general-form-error" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <form id="registrationForm" novalidate>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name <span class="required">*</span></label>
+                    <input type="text" id="firstName" name="firstName" class="input-lift-focus" required maxlength="50">
+                    <%# Optional: Add a span for field-specific error if desired %>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name <span class="required">*</span></label>
+                    <input type="text" id="lastName" name="lastName" class="input-lift-focus" required maxlength="50">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">University Email <span class="required">*</span></label>
+                <input type="email" id="email" name="email" class="input-lift-focus" required maxlength="100"
+                       placeholder="your.name@university.edu">
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role <span class="required">*</span></label>
+                <select id="role" name="role" class="input-lift-focus" required>
+                    <option value="">Select your role</option>
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <div class="password-group">
+                    <input type="password" id="password" name="password" class="input-lift-focus" required minlength="8">
+                    <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
+                </div>
+                <div class="password-strength" id="passwordStrength"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                <div class="password-group">
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="input-lift-focus" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register" id="registerBtn">
+                Create Account
+            </button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="/login">Sign In</a>
+        </div>
+    </div>
+
+    <script src="/js/register.js"></script>
+</body>
+</html>
