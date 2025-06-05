@@ -1,7 +1,7 @@
 # campus-events
 Project Development Summary: Campus Events Hub
-Author: Abdelali522
-Date: (You can put today's date or the project completion date)
+Authors: Abdelali522 and Reda1712
+Date: 06/06/2025
 
 Abstract
 This document summarizes the key development activities and functionalities implemented for the Campus Events Hub project. The project involved building a full-stack web application using Node.js, Express.js, EJS for templating, and MySQL for the database, with Git and GitHub for version control and collaboration.
